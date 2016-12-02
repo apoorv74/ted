@@ -128,3 +128,22 @@ for (i in 1:last_page) {
   
   
 }
+
+
+# Adding video views to master file ---------------------------------------
+setwd('~/Downloads/ted/')
+ted_master <- read.csv('data/master_list_ted.csv',stringsAsFactors = F,colClasses = 'character')
+views_master <- read.csv('data/views_ted.csv')
+ted_master$num_views <- views_master$V1
+# Adding more features ----------------------------------------------------
+
+# ted_master <- read.csv('data/master_list_ted.csv',stringsAsFactors = F,colClasses = 'character')
+addn_cols <- colsplit(ted_master$posted,' ',c('month','year'))
+ted_master <- cbind(ted_master,addn_cols)
+addn_cols <- colsplit(ted_master$tags,',',c('tag1','tag2'))
+ted_master <- cbind(ted_master,addn_cols)
+ted_master$tag1 <- str_trim(ted_master$tag1)
+ted_master$tag2 <- str_trim(ted_master$tag2)
+
+ted_master$num_titles <- str_count(ted_master$speaker_title,',') + 1
+write.csv(ted_master,'data/master_list_ted.csv',row.names = F)
