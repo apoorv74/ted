@@ -4,182 +4,63 @@
 	<meta charset="UTF-8">
 	<title>TED</title>
 
-	<script src="../js/d3_geom.js"></script>
-	
-	 <style type="text/css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
 
-		circle {
-		  stroke: #000;
-		  stroke-opacity: .5;
-		}
-
-		body {
-  background: url(texture-noise.png);
-  overflow: hidden;
-  margin: 0;
-  font-size: 14px;
-  font-family: "Helvetica Neue", Helvetica;
-}
-
-#chart, #header, #footer {
-  position: absolute;
-  top: 0;
-}
-
-#header, #footer {
-  z-index: 1;
-  display: block;
-  font-size: 36px;
-  font-weight: 300;
-  text-shadow: 0 1px 0 #fff;
-}
-
-#header.inverted, #footer.inverted {
-  color: #fff;
-  text-shadow: 0 1px 4px #000;
-}
-
-#header {
-  top: 80px;
-  left: 140px;
-  width: 1000px;
-}
-
-#footer {
-  top: 680px;
-  right: 140px;
-  text-align: right;
-}
-
-rect {
-  fill: none;
-  pointer-events: all;
-}
-
-pre {
-  font-size: 18px;
-}
-
-line {
-  stroke: #000;
-  stroke-width: 1.5px;
-}
-
-.string, .regexp {
-  color: #f39;
-}
-
-.keyword {
-  color: #00c;
-}
-
-.comment {
-  color: #777;
-  font-style: oblique;
-}
-
-.number {
-  color: #369;
-}
-
-.class, .special {
-  color: #1181B8;
-}
-
-a:link, a:visited {
-  color: #000;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #666;
-}
-
-.hint {
-  position: absolute;
-  right: 0;
-  width: 1280px;
-  font-size: 12px;
-  color: #999;
-}
-
-	</style>
 </head>
-<div id="body"></div>
 <body>
-	
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<svg width = "800" height = "600"></svg>
 <script type="text/javascript">
-	
-// console.log(d3);
+var svg = d3.select("svg"),
+    width = +svg.attr("width");
 
-var w = 1280, h = 800;
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
 
-var nodes = d3.range(200).map(function() { return {radius: Math.random() * 12 + 4}; });
+var pack = d3.pack()
+             .size([width,width])
+             .padding(1.5);
 
-var color = d3.scale.category10();
+d3.csv("../data/ted_master.csv", function(d) {
+  d.num_views = +d.num_views;
+  d.year = +d.year;
+  if (d.num_views) return d;
+}, function(error, classes) {
+  if (error) throw error ;
+    var root = d3.hierarchy({children: classes})
+      .sum(function(d) { return d.num_views; })
+      .each(function(d) {
+          year = d.data.year;
+          month = d.data.month;
+          talk_url = d.data.talk_url;
+          num_titles = d.data.num_titles;
+          tag1 = d.data.tag1;
+        // if (year = d.data.year) {
+          // var talk_url, i = talk_url.lastIndexOf(".");
+          // console.log(talk_url.lastIndexOf("."));
+          // console.log(talk_url);
+          // d.talk_url = talk_url;
+          // d.package = talk_url.slice(0, i);
+          d.package = tag1 ;
+          // console.log(d.package);
+          // d.class = talk_url.slice(i + 1);
+          // d.class = year;
+          // console.log(d);
 
-var force = d3.layout.force()
-    .gravity(0.05)
-    .charge(function(d, i) { return i ? 0 : -2000; })
-    .nodes(nodes)
-    .size([w, h]);
-
-var root = nodes[0];
-
-force.start();
-
-var svg = d3.select('#body').append('svg:svg')
-			.attr('width',w)
-			.attr('height',h);	
-
-svg.selectAll('circle')
-	.data(nodes.slice(1))
-	.enter().append('svg:circle')
-	.attr('r',function(d){return d.radius - 2; })
-	.style("fill",function(d,i){return color(i % 3); });
-
-
-force.on("tick", function(e) {
-  var q = d3.geom.quadtree(nodes),
-      i = 0,
-      n = nodes.length;
-
-  while (++i < n) {
-    q.visit(collide(nodes[i]));
-  }
-
-  svg.selectAll("circle")
-      .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
-});
+        // }
+      });
 
 
+  var node = svg.selectAll(".node")
+      .data(pack(root).leaves())
+      .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
+   node.append("circle")
+      .attr("id", function(d) { return d.talk_url; })
+      .attr("r", function(d) { return d.r; })
+      .style("fill", function(d) { return color(d.package); });
 
-console.log(svg);
-
-
-
-
-
-
-// d3.csv("../data/ted_master.csv",function(data){
-// 	data.forEach(function(d){
-// 		d.num_views = +d.num_views;
-// 		var nodes = d.num_views;
-// 		var color = d3.scale.category10();
-
-// 	});
-// 	console.log(data[1,1])
-// });
-
-
-
-
-
-
+    });
 </script>
 </body>
 </html>
