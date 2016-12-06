@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TED</title>
+
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+</head>
+<body>
+<svg width = "800" height = "600"></svg>
+<script type="text/javascript">
+var svg = d3.select("svg"),
+    width = +svg.attr("width");
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var pack = d3.pack()
+             .size([width,width])
+             .padding(0.2);
+
+// var my_scale = d3.scaleLinear()
+//                   .domain(Math.min(d.num_views),Math.max(d.num_views))
+//                   .range(10,1000);
+
+
+d3.csv("../data/ted_master.csv", function(d) {
+  d.num_views = +d.num_views;
+
+
+  d.year = +d.year;
+  if (d.num_views) return d;
+}, function(error, classes) {
+  if (error) throw error ;
+
+    //  var radiusScale = d3.scalePow()
+    // .exponent(0.5)
+    // .range([2, 85]);
+
+    var root = d3.hierarchy({children: classes})
+      // .sum(function(d) { return d.num_views; })
+      .each(function(d) {
+          year = d.data.year;
+          month = d.data.month;
+          talk_url = d.data.talk_url;
+          num_titles = d.data.num_titles;
+          tag1 = d.data.tag1;
+          num_views = d.data.num_views;
+          // r = radiusScale(num_views);
+          // console.log(num_views)
+        // if (year = d.data.year) {
+          // var talk_url, i = talk_url.lastIndexOf(".");
+          // console.log(talk_url.lastIndexOf("."));
+          // console.log(talk_url);
+          // d.talk_url = talk_url;
+          // d.package = talk_url.slice(0, i);
+          d.package = tag1 ;
+          // console.log(d.package);
+          // d.class = talk_url.slice(i + 1);
+          // d.class = year;
+          // console.log(d);
+
+        // }
+      });
+
+   console.log(root);
+
+  var node = svg.selectAll(".node")
+      .data(pack(root).leaves())
+      .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+
+   node.append("circle")
+      .attr("id", function(d) { return d.talk_url; })
+      .attr("r", function(d) { return d.r; })
+      .style("fill", function(d) { return color(d.package); });
+
+    });
+</script>
+</body>
+</html>
