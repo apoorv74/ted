@@ -1,55 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:xlink="http://www.w3.org/1999/xlink">
-<head>
-
-  <meta charset="UTF-8">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TED</title>
-  <meta name="description" content="A different TED browser">
-  <meta name="author" content="Apoorv Anand">
-
-</head>
-<body>
-<div class="container-fluid">
-
-
-  <div class="page-header">
-    <svg xmlns="http://www.w3.org/2000/svg" width="600" height="100">
-      <!-- <rect x="0" y="0" width="640" height="360" fill="none"></rect> -->
-      <path d="M21.244 21.053h-6.761V14.85h21.012v6.203h-6.762V39.15h-7.489V21.053zm15.414-6.203h20.43v6.203H44.147v2.992h12.941v5.837H44.147v3.065h12.941v6.203h-20.43v-24.3zm21.666 0h12.287c8.071 0 10.906 5.984 10.906 12.114 0 7.443-3.926 12.186-12.36 12.186H58.324v-24.3zm7.489 18.097h2.908c4.653 0 5.308-3.794 5.308-6.056 0-1.533-.509-5.765-5.89-5.765H65.74l.073 11.821z" fill="#E62B1E">
-      </path>
-    </svg>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TED</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
+    <link rel="stylesheet" href="ted_bubble.css">
+  <link rel="stylesheet" href="reset.css">
+  </head>
+  <body>
+  <section class="hero is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title" style="color: #E62B1E">
+        TED
+      </h1>
+      <h2 class="subtitle">
+        Ideas worth spreading
+      </h2>
+    </div>
   </div>
+</section>
 
-      <div class="ted_bubble">
-      <!-- <script src="pym.v1.min.js"></script>
-      <script>
-        var pymParent = new pym.Parent('ted_bubble', './bubble.html', {});
-      </script> -->
-      <iframe src="./bubble.html" allowfullscreen></iframe>
-        </div>
-</div>
+  <section class="section">
 
+    <div class="container has-text-centered">
 
+        <div id="vis"></div>
+            </div>
+  </section>
 
 <footer class="footer">
-      <div class="container">
-        <p class="text-muted">ALL TED videos from 2006 till date</p>
-      </div>
-</footer>
-
-
-
-  <link rel="stylesheet" href="ted_bubble.css">
-  <link rel="stylesheet" href="reset.css">
-  <link rel="stylesheet" href="../css/bootstrap.min.css">
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        <strong>TED Browser</strong> by <a href="https://twitter.com/apo_orv">Apoorv Anand</a>. The source code is licensed
+        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+      </p>
+      <a href="https://bulma.io">
+    <img src="https://bulma.io/images/made-with-bulma.png" alt="Made with Bulma" width="128" height="24">
+  </a>
+    </div>
+  </div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src = 'tooltip.js'></script>
   <script src = 'ted_bubble.js'></script>
-  <script src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-  <script src = '../js/bootstrap.min.js'></script>
-
-</body>
+</footer>
+  </body>
 </html>
